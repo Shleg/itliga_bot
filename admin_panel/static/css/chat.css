@@ -1,0 +1,56 @@
+body {
+    background-color: #212529;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin: 0 auto;
+    width: 50%;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+}
+
+.user-message {
+    background-color: #e6f7ff;
+    float: right;
+    clear: both;
+}
+
+.other-message {
+    background-color: #fff3cd;
+    float: left;
+    clear: both;
+}
+
+.sender {
+    font-weight: bold;
+}
+
+.timestamp {
+    font-size: 0.8em;
+    color: #888;
+}
+
+.chat-container {
+    border: 1px solid #ccc;
+    padding: 15px;
+    background: #84c7ce;
+    border-radius: 7px;
+}
+
+.chat-container:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.image-message .sender,
+.image-message .timestamp {
+  display: block;
+  text-align: left;  /* Сместить текст вправо */
+}

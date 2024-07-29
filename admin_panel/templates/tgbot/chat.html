@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}
+    Чат заявки ID: {{ application_id }}
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <h2>Чат заявки ID: {{ application_id }}, Статус: {{ status }}</h2>
+        <div class="chat-container">
+            {% if messages_list %}
+                {% for message in messages_list %}
+                    <div class="message {% if message.sender == 'user' %}user-message{% else %}other-message{% endif %} {% if message.message_type == 'image' %}image-message{% endif %}">
+                        {% if message.sender == 'user' %}
+                            <a href={{ message.application.user.url }}>{{ message.application.user.name }} </a>
+                        {% else %}
+                            <span class="sender">{{ message.author }}</span>
+                        {% endif %}
+                        <span class="timestamp">{{ message.date }}</span>
+                        {% if message.message_type == 'text' %}
+                            <p>{{ message.text }}</p>
+                        {% elif message.message_type == 'image' %}
+                            <img src="{{ message.image.url }}" alt="Картинка">
+                        {% elif message.message_type == 'file' %}
+                            <p>
+                                Файл: <a href="{{ message.file.url }}">Загрузить Файл</a>
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Пусто</p>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        window.onload = function () {
+            var elem = document.querySelector('.chat-container');
+            elem.scrollTop = elem.scrollHeight;
+        }
+    </script>
+{% endblock %}

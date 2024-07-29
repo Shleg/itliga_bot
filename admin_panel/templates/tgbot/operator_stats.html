@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Statistics</title>
+    <!-- подключите Bootstrap CSS здесь -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Оператор: {{ operator.name }}</h1>
+        <table class="table table-striped mt-5">
+            <thead>
+                <tr>
+                    <th>Период</th>
+                    <th>Закрытых заявок</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>За неделю</td>
+                    <td>{{ week_stats }}</td>
+                </tr>
+                <tr>
+                    <td>За месяц</td>
+                    <td>{{ month_stats }}</td>
+                </tr>
+                <tr>
+                    <td>За год</td>
+                    <td>{{ year_stats }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
