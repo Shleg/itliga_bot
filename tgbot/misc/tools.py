@@ -169,7 +169,7 @@ async def support_chat(bot: Bot, message: Message, chat_id: int,
         if app_id and app_text:
             text = [
                 hitalic(f"[Оператор: {message.from_user.full_name}]"),
-                hitalic(f"[Заявка №{app_id} {app_text[:10]}]"),
+                hitalic(f"[Заявка {app_id}: {app_text[:20]}]"),
                 message.text
             ]
             text = '\n'.join(text)
