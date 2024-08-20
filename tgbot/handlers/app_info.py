@@ -1,3 +1,9 @@
+import os
+
+import aiosmtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 from aiogram import Router, Bot, F
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.context import FSMContext
@@ -104,7 +110,42 @@ async def grade_app(call: CallbackQuery, callback_data: GradeCallback, state: FS
     app.status = 'closed'
     app.message_thread_id = None
     app.save()
+
+
     await call.message.edit_text(text='Благодарим за обратную связь. Заявка успешно закрыта',
                                  reply_markup=await menu_kb(app.user.export))
     await create_messages('user', f'Пользователь ({call.from_user.full_name})', app, 'text',
                           f'Пользователь поставил оценку заявке: {callback_data.grade} ⭐️')
+
+    # Отправка письма
+    await send_email(app.pk, app.text, callback_data.grade)
+
+
+async def send_email(app_id, app_text, grade):
+    sender_email = os.getenv('SENDER_EMAIL')
+    receiver_email = os.getenv('RECEIVER_EMAIL')
+    password = os.getenv('EMAIL_PASSWORD')
+    smtp_server=os.getenv('SMTP_SERVER')
+    smtp_port = os.getenv('SMTP_PORT')
+
+    message = MIMEMultipart("alternative")
+    message["Subject"] = f"Заявка {app_id} {app_text[:20]}"
+    message["From"] = sender_email
+    message["To"] = receiver_email
+
+    text = f"Заявка №{app_id}\nТекст заявки:\n{app_text}\nОценка: {grade} ⭐️"
+
+    part = MIMEText(text, "plain")
+    message.attach(part)
+
+    try:
+        await aiosmtplib.send(
+            message,
+            hostname=smtp_server,
+            port=smtp_port,
+            username=sender_email,
+            password=password,
+            use_tls=True,
+        )
+    except Exception as e:
+        print(f"Error sending email: {e}")
