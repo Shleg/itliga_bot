@@ -111,7 +111,6 @@ async def grade_app(call: CallbackQuery, callback_data: GradeCallback, state: FS
     app.message_thread_id = None
     app.save()
 
-
     await call.message.edit_text(text='Благодарим за обратную связь. Заявка успешно закрыта',
                                  reply_markup=await menu_kb(app.user.export))
     await create_messages('user', f'Пользователь ({call.from_user.full_name})', app, 'text',
@@ -123,9 +122,10 @@ async def grade_app(call: CallbackQuery, callback_data: GradeCallback, state: FS
 
 async def send_email(app_id, app_text, grade):
     sender_email = os.getenv('SENDER_EMAIL')
+    auth_email = os.getenv('AUTH_EMAIL')
     receiver_email = os.getenv('RECEIVER_EMAIL')
     password = os.getenv('EMAIL_PASSWORD')
-    smtp_server=os.getenv('SMTP_SERVER')
+    smtp_server = os.getenv('SMTP_SERVER')
     smtp_port = os.getenv('SMTP_PORT')
 
     message = MIMEMultipart("alternative")
@@ -143,9 +143,9 @@ async def send_email(app_id, app_text, grade):
             message,
             hostname=smtp_server,
             port=smtp_port,
-            username=sender_email,
+            username=auth_email,  # Аутентификация под telegram-bot@itliga.lan
             password=password,
-            use_tls=True,
+            start_tls=True,
         )
     except Exception as e:
         print(f"Error sending email: {e}")
